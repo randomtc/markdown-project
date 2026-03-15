@@ -281,7 +281,7 @@ const greeting = "Hello World";
 这是**模拟 AI 流式输出**的内容！
 
 <alert type="info">
-  组件会自动检测流式状态
+  组件会自动检测流式状态=======
 </alert>
 
 ![示例图片](https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png)
