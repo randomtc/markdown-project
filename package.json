@@ -1,5 +1,5 @@
 {
-    "name": "markdown-compiler-demo",
+    "name": "markdown-project",
     "version": "1.0.0",
     "description": "基于 React + TypeScript 的 Markdown 编译器演示",
     "type": "module",
