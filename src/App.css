@@ -1,91 +1,10 @@
-/* 应用布局 */
 .app {
+  width: 100vw;
+  display: flex;
   min-height: 100vh;
-  background: #f5f5f5;
+  justify-content: center;
+  /* align-items: center; */
 }
-
-/* 控制面板 */
-.app-controls {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  padding: 16px 24px;
-  background: white;
-  border-bottom: 1px solid #e8e8e8;
-  flex-wrap: wrap;
-}
-
-.app-controls label {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  cursor: pointer;
-  font-size: 14px;
-  color: #333;
-}
-
-.app-controls input[type="checkbox"] {
-  cursor: pointer;
-}
-
-.app-controls button {
-  padding: 6px 16px;
-  border: 1px solid #d9d9d9;
-  background: white;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 14px;
-  transition: all 0.3s;
-}
-
-.app-controls button:hover {
-  border-color: #1890ff;
-  color: #1890ff;
-}
-
-.app-controls button.active {
-  background: #1890ff;
-  border-color: #1890ff;
-  color: white;
-}
-
-.app-controls button:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
-/* 主内容区 */
-.app-content {
-  padding: 24px;
-  max-width: 1400px;
-  margin: 0 auto;
-}
-
-/* 编辑模式：左右分栏 */
-.app-content:has(.editor-panel) {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 24px;
-}
-
-.editor-panel,
-.preview-panel {
-  background: white;
-  border-radius: 8px;
-  padding: 20px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-}
-
-.editor-panel h2,
-.preview-panel h2,
-.stream-panel h2 {
-  margin: 0 0 16px 0;
-  font-size: 18px;
-  color: #333;
-  border-bottom: 2px solid #f0f0f0;
-  padding-bottom: 12px;
-}
-
 .markdown-input {
   width: 100%;
   min-height: 500px;
@@ -102,16 +21,6 @@
 .markdown-input:focus {
   outline: none;
   border-color: #1890ff;
-}
-
-/* 流式模式 */
-.stream-panel {
-  background: white;
-  border-radius: 8px;
-  padding: 20px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-  max-width: 800px;
-  margin: 0 auto;
 }
 
 /* Markdown 内容样式 */
@@ -252,18 +161,7 @@
   border: 0;
 }
 
-/* 骨架屏样式 */
-.skeleton-image {
-  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
-  background-size: 200% 100%;
-  animation: skeleton-loading 1.5s infinite;
-  border-radius: 4px;
-  min-height: 200px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #999;
-}
+
 
 @keyframes skeleton-loading {
   0% {
@@ -274,33 +172,3 @@
   }
 }
 
-/* Alert 组件样式 */
-.alert-box {
-  padding: 12px 16px;
-  border-radius: 4px;
-  margin-bottom: 16px;
-}
-
-.alert-box.info {
-  background: #e6f7ff;
-  border: 1px solid #91d5ff;
-  color: #096dd9;
-}
-
-.alert-box.warning {
-  background: #fffbe6;
-  border: 1px solid #ffe58f;
-  color: #d48806;
-}
-
-.alert-box.error {
-  background: #fff2f0;
-  border: 1px solid #ffccc7;
-  color: #cf1322;
-}
-
-.alert-box.success {
-  background: #f6ffed;
-  border: 1px solid #b7eb8f;
-  color: #389e0d;
-}
