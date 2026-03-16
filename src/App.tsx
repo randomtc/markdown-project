@@ -247,8 +247,6 @@ const App: React.FC = () => {
                                                     <span>宽度:</span>
                                                     <InputNumber
                                                         size="small"
-                                                        min={100}
-                                                        max={800}
                                                         value={imageConfigInput.width}
                                                         onChange={(v) => setImageConfigInput({ ...imageConfigInput, width: v || 400 })}
                                                         style={{ width: 80 }}
@@ -260,8 +258,6 @@ const App: React.FC = () => {
                                                     <span>高度:</span>
                                                     <InputNumber
                                                         size="small"
-                                                        min={100}
-                                                        max={600}
                                                         value={imageConfigInput.height}
                                                         onChange={(v) => setImageConfigInput({ ...imageConfigInput, height: v || 200 })}
                                                         style={{ width: 80 }}
