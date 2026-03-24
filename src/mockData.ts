@@ -6,16 +6,16 @@ export const demos = [
         content: `
 ### 支持的 Markdown 语法
 
-- **文本样式**: [链接](https://github.com/ant-design/x)、**加粗**、*斜体*、~~删除线~~
-- **图片**: 支持骨架屏占位、自定义尺寸 ![React](https://gw.alipayobjects.com/zos/antfincdn/aPkFc8Sj7n/method-draw-image.svg)
 - **代码**: 行内代码 \`npm install\` 和代码块
-- **表格**: 标准 Markdown 表格
+- **链接**: [链接](https://github.com/ant-design/x) 支持颜色、加粗、斜体、图标、下划线
+- **图片**: 骨架屏占位、自定义尺寸、点击放大 ![React](https://gw.alipayobjects.com/zos/antfincdn/aPkFc8Sj7n/method-draw-image.svg)
 
 ### 自定义组件配置
 
+- **CodeBlock**: 主题切换、行号、复制、放大
+- **InlineCode**: 背景色、文字颜色自定义
+- **Link**: 颜色、加粗、斜体、图标、下划线、占位符
 - **Image**: 宽度/高度、占位符类型（骨架屏/自定义）
-- **Link**: 颜色、加粗、斜体、图标、下划线、占位符文本
-- **CodeBlock**: 语法高亮、复制、放大
 
 \`\`\`typescript
 // 示例代码

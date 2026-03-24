@@ -6,7 +6,7 @@ import { CustomLink } from "./components/CustomLink";
 import { CodeBlock, type CodeTheme } from "./components/CodeBlock";
 import { InlineCode } from "./components/InlineCode";
 import "./App.css";
-import { Button, Card, Flex, Segmented, InputNumber, Space, Switch, Input, Radio, Checkbox, ColorPicker, Typography, Row, Col } from "antd";
+import { Button, Card, Flex, Segmented, InputNumber, Space, Switch, Input, Radio, Checkbox, ColorPicker, Typography } from "antd";
 import { demos } from "./mockData";
 
 
