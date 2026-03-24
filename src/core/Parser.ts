@@ -52,10 +52,6 @@ export function escapeHtml(html: string): string {
     return html.replace(escapeReplace, (ch) => escapeReplacements[ch]);
 }
 
-// =============================================================================
-// 正则表达式常量
-// =============================================================================
-
 /** 
  * 代码块完整性检测正则
  * 匹配：```lang\ncontent\n``` 或 ~~~lang\ncontent\n~~~
@@ -209,13 +205,10 @@ function configureCodeRenderer(markdownInstance: Marked): void {
             // 缩进式代码块或匹配围栏式代码块正则的视为完整
             const streamStatus = isIndentedCode || completeFencedCode.test(raw) ? 'done' : 'loading';
 
-            // 转义代码内容（如果未转义过）
             const escapedCode = escaped ? code : escapeHtml(code);
 
-            // 构建 class 属性
             const classAttr = langString ? ` class="language-${escapeHtml(langString)}"` : '';
 
-            // 构建 data 属性
             const dataAttrs =
                 ` data-block="true" data-state="${streamStatus}"` +
                 (infoString ? ` data-lang="${escapeHtml(infoString)}"` : '');

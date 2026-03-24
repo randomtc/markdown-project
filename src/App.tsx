@@ -3,7 +3,8 @@ import { AlertBox } from "./components/AlertBox";
 import { Markdown } from "./components/Markdown";
 import { SkeletonImage } from "./components/SkeletonImage";
 import { CustomLink } from "./components/CustomLink";
-import { CodeBlock } from "./components/CodeBlock";
+import { CodeBlock, type CodeTheme } from "./components/CodeBlock";
+import { InlineCode } from "./components/InlineCode";
 import "./App.css";
 import { Button, Card, Flex, Segmented, InputNumber, Space, Switch, Input, Radio, Checkbox, ColorPicker, Typography, Row, Col } from "antd";
 import { demos } from "./mockData";
@@ -25,18 +26,42 @@ const App: React.FC = () => {
     // 是否启用自定义组件
     const [enableCustomComponents, setEnableCustomComponents] = useState<boolean>(true);
 
+    // 总览页面各配置开关（默认只打开 Link 和 Image）
+    const [configSwitches, setConfigSwitches] = useState({
+        Link: true,
+        Image: false,
+        CodeBlock: false,
+        InlineCode: false,
+    });
+
     // Image 配置（输入暂存值 & 实际渲染值）
     const [imageConfigInput, setImageConfigInput] = useState({
         width: 100,
         height: 100,
+        preview: true,
         loadingType: 'skeleton' as 'skeleton' | 'custom',
         loadingText: '加载中...',
     });
     const [imageConfig, setImageConfig] = useState({
         width: 100,
         height: 100,
+        preview: true,
         loadingType: 'skeleton' as 'skeleton' | 'custom',
         loadingText: '加载中...',
+    });
+
+    // CodeBlock 配置
+    const [codeBlockConfig, setCodeBlockConfig] = useState({
+        theme: 'vscDarkPlus' as CodeTheme,
+        showLineNumbers: true,
+        showCopy: true,
+        showFullscreen: true,
+    });
+
+    // InlineCode 配置
+    const [inlineCodeConfig, setInlineCodeConfig] = useState({
+        bgColor: '#f5f5f5',
+        color: '#d63384',
     });
 
     // Link 配置（实时生效）
@@ -59,6 +84,7 @@ const App: React.FC = () => {
                 {...props}
                 width={imageConfig.width}
                 height={imageConfig.height}
+                preview={imageConfig.preview}
                 loading={imageConfig.loadingType === 'custom' ? <div style={{ width: imageConfig.width, height: imageConfig.height, display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#f0f0f0', borderRadius: 4 }}>{imageConfig.loadingText}</div> : undefined}
             />
         ),
@@ -67,14 +93,35 @@ const App: React.FC = () => {
                 {...props}
                 width={imageConfig.width}
                 height={imageConfig.height}
+                preview={imageConfig.preview}
                 loading={imageConfig.loadingType === 'custom' ? <div style={{ width: imageConfig.width, height: imageConfig.height, display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#f0f0f0', borderRadius: 4 }}>{imageConfig.loadingText}</div> : undefined}
             />
         ),
         code: (props: any) => {
             const isBlock = props['data-block'] === 'true';
-            if (!isBlock) return <code>{props.children}</code>;
+            // 行内代码
+            if (!isBlock) {
+                return (
+                    <InlineCode
+                        {...props}
+                        bgColor={inlineCodeConfig.bgColor}
+                        color={inlineCodeConfig.color}
+                    />
+                );
+            }
+            // 代码块
             const lang = props['data-lang'] || props.className?.replace('language-', '') || 'text';
-            return <CodeBlock code={props.children} language={lang} />;
+            return (
+                <CodeBlock
+                    {...props}
+                    code={props.children}
+                    language={lang}
+                    theme={codeBlockConfig.theme}
+                    showLineNumbers={codeBlockConfig.showLineNumbers}
+                    showCopy={codeBlockConfig.showCopy}
+                    showFullscreen={codeBlockConfig.showFullscreen}
+                />
+            );
         },
         "incomplete-link": () => (
             <span style={{ color: '#999', fontStyle: 'italic' }}>[{linkConfig.placeholderText}]</span>
@@ -164,130 +211,210 @@ const App: React.FC = () => {
                     {/* 自定义组件配置区 */}
                     <Card
                         size="small"
-                        title={<Typography.Text strong>组件配置</Typography.Text>}
-                        extra={
-                            <Switch
-                                checked={enableCustomComponents}
-                                onChange={setEnableCustomComponents}
-                                checkedChildren="开启"
-                                unCheckedChildren="关闭"
-                            />
+                        title={
+                            <Space>
+                                <Typography.Text strong>组件配置</Typography.Text>
+                                <Switch
+                                    size="small"
+                                    checked={enableCustomComponents}
+                                    onChange={setEnableCustomComponents}
+                                    checkedChildren="开启"
+                                    unCheckedChildren="关闭"
+                                />
+                            </Space>
                         }
                     >
                         {enableCustomComponents ? (
-                            <Flex vertical gap="small">
-                                {(currentDemo === '总览' || currentDemo === 'Link') && (
-                                    <div>
-                                        <Typography.Text type="secondary" style={{ fontSize: 12 }}>Link 配置</Typography.Text>
-                                        <Row gutter={[8, 8]} align="middle" style={{ marginTop: 4 }}>
-                                            <Col>
-                                                <Space>
-                                                    <span>颜色:</span>
-                                                    <ColorPicker
-                                                        size="small"
-                                                        value={linkConfig.color}
-                                                        onChange={(color) => setLinkConfig({ ...linkConfig, color: color.toHexString() })}
-                                                    />
-                                                </Space>
-                                            </Col>
-                                            <Col>
-                                                <Checkbox
-                                                    checked={linkConfig.bold}
-                                                    onChange={(e) => setLinkConfig({ ...linkConfig, bold: e.target.checked })}
-                                                >
-                                                    加粗
-                                                </Checkbox>
-                                            </Col>
-                                            <Col>
-                                                <Checkbox
-                                                    checked={linkConfig.italic}
-                                                    onChange={(e) => setLinkConfig({ ...linkConfig, italic: e.target.checked })}
-                                                >
-                                                    斜体
-                                                </Checkbox>
-                                            </Col>
-                                            <Col>
-                                                <Checkbox
-                                                    checked={linkConfig.showIcon}
-                                                    onChange={(e) => setLinkConfig({ ...linkConfig, showIcon: e.target.checked })}
-                                                >
-                                                    图标
-                                                </Checkbox>
-                                            </Col>
-                                            <Col>
-                                                <Checkbox
-                                                    checked={linkConfig.underline}
-                                                    onChange={(e) => setLinkConfig({ ...linkConfig, underline: e.target.checked })}
-                                                >
-                                                    下划线
-                                                </Checkbox>
-                                            </Col>
-                                            <Col>
-                                                <Space>
-                                                    <span>占位符:</span>
-                                                    <Input
-                                                        size="small"
-                                                        value={linkConfig.placeholderText}
-                                                        onChange={(e) => setLinkConfig({ ...linkConfig, placeholderText: e.target.value })}
-                                                        style={{ width: 120 }}
-                                                        placeholder="占位提示"
-                                                    />
-                                                </Space>
-                                            </Col>
-                                        </Row>
-                                    </div>
+                            <Flex vertical gap="middle">
+                                {/* 总览页面显示配置开关 */}
+                                {currentDemo === '总览' && (
+
+                                    <Space wrap>
+                                        <Switch
+                                            size="small"
+                                            checked={configSwitches.Link}
+                                            onChange={(checked) => setConfigSwitches({ ...configSwitches, Link: checked })}
+                                            checkedChildren="Link"
+                                            unCheckedChildren="Link"
+                                        />
+                                        <Switch
+                                            size="small"
+                                            checked={configSwitches.Image}
+                                            onChange={(checked) => setConfigSwitches({ ...configSwitches, Image: checked })}
+                                            checkedChildren="Image"
+                                            unCheckedChildren="Image"
+                                        />
+                                        <Switch
+                                            size="small"
+                                            checked={configSwitches.CodeBlock}
+                                            onChange={(checked) => setConfigSwitches({ ...configSwitches, CodeBlock: checked })}
+                                            checkedChildren="CodeBlock"
+                                            unCheckedChildren="CodeBlock"
+                                        />
+                                        <Switch
+                                            size="small"
+                                            checked={configSwitches.InlineCode}
+                                            onChange={(checked) => setConfigSwitches({ ...configSwitches, InlineCode: checked })}
+                                            checkedChildren="InlineCode"
+                                            unCheckedChildren="InlineCode"
+                                        />
+                                    </Space>
+
                                 )}
 
-                                {(currentDemo === '总览' || currentDemo === 'Image') && (
-                                    <div>
-                                        <Typography.Text type="secondary" style={{ fontSize: 12 }}>Image 配置</Typography.Text>
-                                        <Row gutter={[8, 8]} align="middle" style={{ marginTop: 4 }}>
-                                            <Col>
-                                                <Space>
-                                                    <span>宽度:</span>
-                                                    <InputNumber
-                                                        size="small"
-                                                        value={imageConfigInput.width}
-                                                        onChange={(v) => setImageConfigInput({ ...imageConfigInput, width: v || 400 })}
-                                                        style={{ width: 80 }}
-                                                    />
-                                                </Space>
-                                            </Col>
-                                            <Col>
-                                                <Space>
-                                                    <span>高度:</span>
-                                                    <InputNumber
-                                                        size="small"
-                                                        value={imageConfigInput.height}
-                                                        onChange={(v) => setImageConfigInput({ ...imageConfigInput, height: v || 200 })}
-                                                        style={{ width: 80 }}
-                                                    />
-                                                </Space>
-                                            </Col>
-                                            <Col>
+                                {(currentDemo === '总览' ? configSwitches.Link : currentDemo === 'Link') && (
+                                    <Card size="small" title="Link" style={{ background: '#fafafa' }}>
+                                        <Space wrap>
+                                            <Space>
+                                                <span>颜色</span>
+                                                <ColorPicker
+                                                    size="small"
+                                                    value={linkConfig.color}
+                                                    onChange={(color) => setLinkConfig({ ...linkConfig, color: color.toHexString() })}
+                                                />
+                                            </Space>
+                                            <Checkbox
+                                                checked={linkConfig.bold}
+                                                onChange={(e) => setLinkConfig({ ...linkConfig, bold: e.target.checked })}
+                                            >
+                                                加粗
+                                            </Checkbox>
+                                            <Checkbox
+                                                checked={linkConfig.italic}
+                                                onChange={(e) => setLinkConfig({ ...linkConfig, italic: e.target.checked })}
+                                            >
+                                                斜体
+                                            </Checkbox>
+                                            <Checkbox
+                                                checked={linkConfig.showIcon}
+                                                onChange={(e) => setLinkConfig({ ...linkConfig, showIcon: e.target.checked })}
+                                            >
+                                                图标
+                                            </Checkbox>
+                                            <Checkbox
+                                                checked={linkConfig.underline}
+                                                onChange={(e) => setLinkConfig({ ...linkConfig, underline: e.target.checked })}
+                                            >
+                                                下划线
+                                            </Checkbox>
+                                            <div>
+                                                <span>占位符：</span>
+                                                <Input
+                                                    size="small"
+                                                    value={linkConfig.placeholderText}
+                                                    onChange={(e) => setLinkConfig({ ...linkConfig, placeholderText: e.target.value })}
+                                                    style={{ width: 120 }}
+                                                    placeholder="占位符文本"
 
+                                                />
+                                            </div>
+
+                                        </Space>
+                                    </Card>
+                                )}
+
+                                {(currentDemo === '总览' ? configSwitches.Image : currentDemo === 'Image') && (
+                                    <Card size="small" title="Image" style={{ background: '#fafafa' }}>
+                                        <Space wrap align="center">
+                                            <InputNumber
+                                                size="small"
+                                                min={50}
+                                                max={800}
+                                                value={imageConfigInput.width}
+                                                onChange={(v) => setImageConfigInput({ ...imageConfigInput, width: v ?? 400 })}
+                                                style={{ width: 80 }}
+                                            />
+                                            <InputNumber
+                                                size="small"
+                                                min={50}
+                                                max={600}
+                                                value={imageConfigInput.height}
+                                                onChange={(v) => setImageConfigInput({ ...imageConfigInput, height: v ?? 200 })}
+                                                style={{ width: 80 }}
+                                            />
+                                            <div>
+                                                <span>占位符：</span>
                                                 <Radio.Group
                                                     size="small"
                                                     value={imageConfigInput.loadingType}
                                                     onChange={(e) => setImageConfigInput({ ...imageConfigInput, loadingType: e.target.value })}
                                                 >
-                                                    <Radio value="skeleton">骨架屏</Radio>
-                                                    <Radio value="custom">自定义:</Radio>
+                                                    <Radio.Button value="skeleton">骨架屏</Radio.Button>
+                                                    <Radio.Button value="custom">自定义</Radio.Button>
                                                 </Radio.Group>
-                                            </Col>
+                                            </div>
                                             {imageConfigInput.loadingType === 'custom' && (
-                                                <Col>
-                                                    <Input
-                                                        size="small"
-                                                        value={imageConfigInput.loadingText}
-                                                        onChange={(e) => setImageConfigInput({ ...imageConfigInput, loadingText: e.target.value })}
-                                                        style={{ width: 150 }}
-                                                        placeholder="加载提示"
-                                                    />
-                                                </Col>
+                                                <Input
+                                                    size="small"
+                                                    value={imageConfigInput.loadingText}
+                                                    onChange={(e) => setImageConfigInput({ ...imageConfigInput, loadingText: e.target.value })}
+                                                    style={{ width: 120 }}
+                                                    placeholder="占位符文本"
+                                                />
                                             )}
-                                        </Row>
-                                    </div>
+                                        </Space>
+                                    </Card>
+                                )}
+
+                                {(currentDemo === '总览' ? configSwitches.CodeBlock : currentDemo === 'CodeBlock') && (
+                                    <Card size="small" title="CodeBlock" style={{ background: '#fafafa' }}>
+                                        <Space wrap align="center">
+                                            <Radio.Group
+                                                size="small"
+                                                value={codeBlockConfig.theme}
+                                                onChange={(e) => setCodeBlockConfig({ ...codeBlockConfig, theme: e.target.value })}
+                                            >
+                                                <Radio.Button value="vscDarkPlus">VSC Dark</Radio.Button>
+                                                <Radio.Button value="oneLight">Light</Radio.Button>
+                                                <Radio.Button value="dracula">Dracula</Radio.Button>
+                                                <Radio.Button value="atomDark">Atom</Radio.Button>
+                                            </Radio.Group>
+                                            <Checkbox
+                                                checked={codeBlockConfig.showLineNumbers}
+                                                onChange={(e) => setCodeBlockConfig({ ...codeBlockConfig, showLineNumbers: e.target.checked })}
+                                            >
+                                                行号
+                                            </Checkbox>
+                                            <Checkbox
+                                                checked={codeBlockConfig.showCopy}
+                                                onChange={(e) => setCodeBlockConfig({ ...codeBlockConfig, showCopy: e.target.checked })}
+                                            >
+                                                复制
+                                            </Checkbox>
+                                            <Checkbox
+                                                checked={codeBlockConfig.showFullscreen}
+                                                onChange={(e) => setCodeBlockConfig({ ...codeBlockConfig, showFullscreen: e.target.checked })}
+                                            >
+                                                放大
+                                            </Checkbox>
+                                        </Space>
+                                    </Card>
+                                )}
+
+                                {(currentDemo === '总览' ? configSwitches.InlineCode : currentDemo === 'InlineCode') && (
+                                    <Card size="small" title="InlineCode" style={{ background: '#fafafa' }}>
+                                        <Space wrap align="center">
+                                            <Space>
+                                                <span>背景</span>
+                                                <ColorPicker
+                                                    size="small"
+                                                    value={inlineCodeConfig.bgColor}
+                                                    onChange={(color) => setInlineCodeConfig({ ...inlineCodeConfig, bgColor: color.toHexString() })}
+                                                />
+                                            </Space>
+
+                                            <Space>
+                                                <span>文字</span>
+                                                <ColorPicker
+                                                    size="small"
+                                                    value={inlineCodeConfig.color}
+                                                    onChange={(color) => setInlineCodeConfig({ ...inlineCodeConfig, color: color.toHexString() })}
+                                                />
+                                            </Space>
+
+
+                                        </Space>
+                                    </Card>
                                 )}
                             </Flex>
                         ) : (

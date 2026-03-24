@@ -2,15 +2,40 @@ import React, { useState } from 'react';
 import { Button, Modal, Space, Typography, message } from 'antd';
 import { CopyOutlined, FullscreenOutlined, CheckOutlined } from '@ant-design/icons';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
+import { vscDarkPlus, oneLight, oneDark, vs, dracula, atomDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
+import type { ComponentProps } from '../core/Renderer';
 
-export interface CodeBlockProps {
+// 主题映射表
+const themeMap = {
+    vscDarkPlus,
+    oneLight,
+    oneDark,
+    vs,
+    dracula,
+    atomDark,
+};
+
+export type CodeTheme = keyof typeof themeMap;
+
+export interface CodeBlockProps extends ComponentProps {
     code: string;
     language?: string;
     filename?: string;
+    theme?: CodeTheme;
+    showLineNumbers?: boolean;
+    showCopy?: boolean;
+    showFullscreen?: boolean;
 }
 
-export const CodeBlock: React.FC<CodeBlockProps> = ({ code, language = 'text', filename }) => {
+export const CodeBlock: React.FC<CodeBlockProps> = ({
+    code,
+    language = 'text',
+    filename,
+    theme = 'vscDarkPlus',
+    showLineNumbers = true,
+    showCopy = true,
+    showFullscreen = true,
+}) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [copied, setCopied] = useState(false);
 
@@ -26,6 +51,7 @@ export const CodeBlock: React.FC<CodeBlockProps> = ({ code, language = 'text', f
     };
 
     const displayLanguage = language === 'text' || !language ? 'plaintext' : language;
+    const selectedTheme = themeMap[theme] || vscDarkPlus;
 
     return (
         <div style={{ position: 'relative', margin: '16px 0' }}>
@@ -47,31 +73,31 @@ export const CodeBlock: React.FC<CodeBlockProps> = ({ code, language = 'text', f
                     </Typography.Text>
                 </Space>
                 <Space>
-                    <Button
-                        type="text"
-                        size="small"
-                        icon={copied ? <CheckOutlined style={{ color: '#52c41a' }} /> : <CopyOutlined />}
-                        onClick={handleCopy}
-                        style={{ color: '#858585' }}
-                    >
-                        {copied ? '已复制' : '复制'}
-                    </Button>
-                    <Button
-                        type="text"
-                        size="small"
-                        icon={<FullscreenOutlined />}
-                        onClick={() => setIsModalOpen(true)}
-                        style={{ color: '#858585' }}
-                    >
-                        放大
-                    </Button>
+                    {showFullscreen && (
+                        <Button
+                            type="text"
+                            size="small"
+                            icon={<FullscreenOutlined />}
+                            onClick={() => setIsModalOpen(true)}
+                            style={{ color: '#858585' }}
+                        />
+                    )}
+                    {showCopy && (
+                        <Button
+                            type="text"
+                            size="small"
+                            icon={copied ? <CheckOutlined style={{ color: '#52c41a' }} /> : <CopyOutlined />}
+                            onClick={handleCopy}
+                            style={{ color: '#858585' }}
+                        />
+                    )}
                 </Space>
             </div>
 
             {/* 代码块内容 */}
             <SyntaxHighlighter
                 language={displayLanguage}
-                style={vscDarkPlus}
+                style={selectedTheme}
                 customStyle={{
                     margin: 0,
                     borderRadius: '0 0 8px 8px',
@@ -79,7 +105,7 @@ export const CodeBlock: React.FC<CodeBlockProps> = ({ code, language = 'text', f
                     lineHeight: 1.6,
                     maxHeight: 400,
                 }}
-                showLineNumbers
+                showLineNumbers={showLineNumbers}
             >
                 {code}
             </SyntaxHighlighter>
@@ -97,9 +123,8 @@ export const CodeBlock: React.FC<CodeBlockProps> = ({ code, language = 'text', f
                             size="small"
                             icon={copied ? <CheckOutlined style={{ color: '#52c41a' }} /> : <CopyOutlined />}
                             onClick={handleCopy}
-                        >
-                            {copied ? '已复制' : '复制'}
-                        </Button>
+                        />
+
                     </div>
                 }
                 open={isModalOpen}
@@ -110,7 +135,7 @@ export const CodeBlock: React.FC<CodeBlockProps> = ({ code, language = 'text', f
             >
                 <SyntaxHighlighter
                     language={displayLanguage}
-                    style={vscDarkPlus}
+                    style={selectedTheme}
                     customStyle={{
                         margin: 0,
                         borderRadius: 0,
@@ -118,7 +143,7 @@ export const CodeBlock: React.FC<CodeBlockProps> = ({ code, language = 'text', f
                         lineHeight: 1.6,
                         maxHeight: '70vh',
                     }}
-                    showLineNumbers
+                    showLineNumbers={showLineNumbers}
                 >
                     {code}
                 </SyntaxHighlighter>

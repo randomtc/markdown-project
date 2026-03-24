@@ -33,7 +33,21 @@ console.log(greeting);
         content:
             '![React](https://gw.alipayobjects.com/zos/antfincdn/aPkFc8Sj7n/method-draw-image.svg)',
     },
+    {
+        title: 'InlineCode',
+        content: `支持行内代码样式自定义：
 
+代码：\`const x = 1\`、\`function()\`
+
+命令行：
+- \`npm install react\`
+- \`yarn add antd\`
+- \`pnpm dev\`
+- \`npx create-react-app my-app\`
+- \`npm run build\`
+
+可在配置面板自定义背景和文字颜色，或开关命令行样式。`,
+    },
     {
         title: 'CodeBlock',
         content: `\`\`\`typescript
@@ -51,4 +65,5 @@ const App: React.FC = () => {
 export default App;
 \`\`\``,
     },
+
 ];
