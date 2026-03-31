@@ -208,7 +208,6 @@ const App: React.FC = () => {
                         block
                     />
 
-                    {/* 自定义组件配置区 */}
                     <Card
                         size="small"
                         title={
@@ -468,12 +467,6 @@ const App: React.FC = () => {
                             />
                         </Card>
                     </Flex>
-
-
-
-
-
-                    {/* <Markdown content={STREAM_DEMO_TEXT} /> */}
                 </Flex>
             </Card>
         </div>

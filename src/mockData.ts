@@ -7,7 +7,7 @@ export const demos = [
 ### 支持的 Markdown 语法
 
 - **代码**: 行内代码 \`npm install\` 和代码块
-- **链接**: [链接](https://github.com/ant-design/x) 支持颜色、加粗、斜体、图标、下划线
+- **链接**: [链接](https://github.com/) 支持颜色、加粗、斜体、图标、下划线
 - **图片**: 骨架屏占位、自定义尺寸、点击放大 ![React](https://gw.alipayobjects.com/zos/antfincdn/aPkFc8Sj7n/method-draw-image.svg)
 
 ### 自定义组件配置
@@ -64,6 +64,6 @@ const App: React.FC = () => {
 
 export default App;
 \`\`\``,
-    },
+    }
 
 ];

@@ -35,7 +35,6 @@ export const Markdown: React.FC<MarkdownProps> = ({
     // 步骤 1: 流式预处理（支持占位符生成）
     const streamingContent = useStreaming(content, { ...streaming, components });
 
-
     // 使用 useMemo 缓存解析结果，避免重复计算
     const reactContent = useMemo(() => {
         // 步骤 2: 解析 Markdown 为 HTML（纯函数）

@@ -257,14 +257,11 @@ function createReplaceElement(
 
         const { name, attribs, children } = domNode as Element;
 
-        // 检查是否有针对该标签的自定义组件映射
         const componentKey = name.toLowerCase();
         const customComponent = components?.[componentKey];
 
-        // 如果没有映射的组件，返回 undefined 让默认处理（原生标签）
         if (!customComponent) return;
 
-        // 使用自定义组件渲染
         const renderElement = customComponent;
 
         // -------------------------------------------------------------------------

@@ -15,7 +15,6 @@ import {
  *   - 识别不完整的 Markdown 语法（image、link、table、code 等）
  *   - 生成占位符组件，实现渐进式渲染
  * 
- * 设计灵感：参考 x-markdown 的流式缓存机制
  */
 
 import type { ComponentType } from 'react';
