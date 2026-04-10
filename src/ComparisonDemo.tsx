@@ -13,10 +13,10 @@ interface ComparisonDemoProps {
  * 对比本项目 Markdown 渲染与 Streamdown 渲染效果
  */
 export const ComparisonDemo: React.FC<ComparisonDemoProps> = ({
-    initialContent = ` ![React](https://gw.alipayobjects.com/zos/antfincdn/aPkFc8Sj7n/method-draw-image.svg)`,
-}) => {
+    // initialContent = ` ![React](https://gw.alipayobjects.com/zos/antfincdn/aPkFc8Sj7n/method-draw-image.svg)`,
+    initialContent = ` [Google](https://www.google.com/)`,
 
-    // ![React](https://gw.alipayobjects.com/zos/antfincdn/aPkFc8Sj7n/method-draw-image.svg)
+}) => {
 
     // 流式渲染状态
     const [content, setContent] = useState<string>("");
@@ -51,6 +51,9 @@ export const ComparisonDemo: React.FC<ComparisonDemoProps> = ({
                 preview={imageConfig.preview}
                 loading={imageConfig.loadingType === 'custom' ? <div style={{ width: imageConfig.width, height: imageConfig.height, display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#f0f0f0', borderRadius: 4 }}>{imageConfig.loadingText}</div> : undefined}
             />
+        ),
+        "incomplete-link": () => (
+            <span style={{ color: '#999', fontStyle: 'italic' }}>加载中...</span>
         ),
     };
 
